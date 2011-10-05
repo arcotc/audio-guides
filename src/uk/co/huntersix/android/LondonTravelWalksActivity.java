@@ -10,21 +10,23 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class MySecondActivity extends Activity {
+public class LondonTravelWalksActivity extends Activity {
 	ProgressBar progressBar;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.second);
+        setContentView(R.layout.londontravelwalks);
         
         progressBar = (ProgressBar)findViewById(R.id.progressbar_Horizontal);
         progressBar.setProgress(0);
@@ -33,8 +35,9 @@ public class MySecondActivity extends Activity {
     }
     
     public void startSamplesActivity(View view) {
-    	Intent myIntent = new Intent(MySecondActivity.this, MySamplesActivity.class);
-    	MySecondActivity.this.startActivity(myIntent);
+//    	Intent myIntent = new Intent(LondonTravelWalksActivity.this, GuardianAudioWalksActivity.class);
+    	Intent myIntent = new Intent(LondonTravelWalksActivity.this, WalksListViewActivity.class);
+    	LondonTravelWalksActivity.this.startActivity(myIntent);
     }
 
 
@@ -56,7 +59,7 @@ public class MySecondActivity extends Activity {
         	String resultText = "";
 
         	try {
-				String uri = "http://content.guardianapis.com/search?section=travel&format=json&api-key=pbpw3gnyu3kcna9eqe736aj6";
+				String uri = "http://content.guardianapis.com/search?q=london-walks&section=travel&format=json&show-fields=standfirst%2Clongitude%2Clatitude&api-key=pbpw3gnyu3kcna9eqe736aj6";
 				HttpClient client = new DefaultHttpClient();
 		        HttpGet request = new HttpGet();
 		        request.setURI(new URI(uri));
@@ -69,12 +72,17 @@ public class MySecondActivity extends Activity {
 		        String status = response.getString("status");
 		        if ("ok".equalsIgnoreCase(status)) {
 		        	JSONArray results = response.getJSONArray("results");
+		        	int incrementor = 100 / results.length();
 		        	boolean first = true;
 		        	for (int i=0; i<results.length(); i++) {
 		        		if (!first) resultText += ", ";
 		        		JSONObject result = results.getJSONObject(i);
+//		        		ListView walksList = (ListView) findViewById(R.id.walksList);
 		        		resultText += result.getString("webTitle");
 		        		System.out.println(String.format("webTitle: %s", result.getString("webTitle")));
+
+		        		myProgress += incrementor;
+		    			publishProgress(myProgress);
 		        	}
 			    }
 			}
@@ -82,10 +90,6 @@ public class MySecondActivity extends Activity {
 				System.out.println("****************");
 				System.out.println(e.getMessage());
 			}
-
-//	        if (isCancelled()) break;
-
-			publishProgress(myProgress++);
 			
 			return resultText;
 		}

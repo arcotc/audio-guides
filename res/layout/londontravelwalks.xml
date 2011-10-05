@@ -2,14 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
-	<TextView android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:text="@string/second" />
-	<Button android:text="Finished" android:id="@+id/finishButton"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:onClick="startSamplesActivity" android:visibility="invisible"></Button>
 	<ProgressBar android:layout_width="fill_parent"
 		android:layout_height="wrap_content" style="?android:attr/progressBarStyleHorizontal"
 		android:id="@+id/progressbar_Horizontal" android:max="100" />
+	<Button android:text="Finished" android:id="@+id/finishButton"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:onClick="startSamplesActivity" android:visibility="invisible"></Button>
 	<TextView android:id="@+id/resultText" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:text="@string/second" android:visibility="invisible" />
 </LinearLayout>

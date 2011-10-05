@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, MySamplesActivity!</string>
-    <string name="app_name">MySamples</string>
+    <string name="app_name">Guardian Audio Walks</string>
     <string name="second">Second activity!</string>
+    <string name="travel_walks_london">London Travel Walks</string>
+    <string name="travel_walks_london_title">Guardian Audio Walks - London Travel Walks</string>
+	<string name="package_str">uk.co.huntersix.android</string>
 </resources>
