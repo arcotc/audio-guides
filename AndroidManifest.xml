@@ -14,5 +14,6 @@
 		</activity>
 		<activity android:name=".LondonTravelWalksActivity" android:label="@string/travel_walks_london_title" />
         <activity android:name=".WalksListViewActivity"  android:label="@string/travel_walks_london_title" />
+        <activity android:name=".WalkViewActivity"  android:label="@string/app_name" />
 	</application>
 </manifest>

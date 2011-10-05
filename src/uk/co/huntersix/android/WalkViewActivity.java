@@ -1,7 +1,10 @@
 package uk.co.huntersix.android;
 
-import java.lang.annotation.Target;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +15,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import uk.co.huntersix.android.manager.DrawableManager;
 import uk.co.huntersix.android.model.TravelWalk;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -28,45 +33,37 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class WalksListViewActivity extends ListActivity {
+public class WalkViewActivity extends ListActivity {
 	private ProgressBar progressBar;
-	private EfficientAdapter adapter;
+	private EfficientAdapter adap;
 	private static List<TravelWalk> travelWalks;
+	private static DrawableManager drawableManager = new DrawableManager();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list);
+		Intent intent = getIntent();
+		Bundle bundle = intent.getExtras();
+		setTitle(getTitle() + " - " + bundle.get("travelWalkTitle"));
 		
         progressBar = (ProgressBar)findViewById(R.id.progressbar_Horizontal);
         progressBar.setProgress(0);
         
-        new LoadAPIContentTask().execute("http://content.guardianapis.com/search?q=london-walks&section=travel&format=json&show-fields=standfirst%2Clongitude%2Clatitude%2Cthumbnail&api-key=pbpw3gnyu3kcna9eqe736aj6");
+//        new LoadAPIContentTask().execute("http://content.guardianapis.com/search?q=london-walks&section=travel&format=json&show-fields=standfirst%2Clongitude%2Clatitude%2Cthumbnail&api-key=pbpw3gnyu3kcna9eqe736aj6");
 	}
 
 	public void showList(List<TravelWalk> results) {
 		travelWalks = results;
 		
-        adapter = new EfficientAdapter(this);
-		setListAdapter(adapter);
+        adap = new EfficientAdapter(this);
+		setListAdapter(adap);
 		
 		progressBar.setVisibility(View.INVISIBLE);
-	}
-	
-
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-
-		Intent intent = new Intent(this, WalkViewActivity.class);
-		TravelWalk travelWalk = travelWalks.get(position);
-		intent.putExtra("travelWalkTitle", travelWalk.title);
-    	this.startActivity(intent);
 	}
 
 	public static class EfficientAdapter extends BaseAdapter implements Filterable {
@@ -86,7 +83,7 @@ public class WalksListViewActivity extends ListActivity {
 		 * @see android.widget.ListAdapter#getView(int, android.view.View,
 		 *      android.view.ViewGroup)
 		 */
-		public View getView(final int position, View convertView, final ViewGroup parent) {
+		public View getView(final int position, View convertView, ViewGroup parent) {
 			// A ViewHolder keeps references to children views to avoid
 			// unnecessary calls to findViewById() on each row.
 			ViewHolder holder;
@@ -102,14 +99,14 @@ public class WalksListViewActivity extends ListActivity {
 				holder.textLine = (TextView) convertView.findViewById(R.id.textLine);
 				holder.description = (TextView) convertView.findViewById(R.id.description);
 				holder.walkThumbnail = (ImageView) convertView.findViewById(R.id.iconLine);
-//
-//				convertView.setOnClickListener(new OnClickListener() {
-//					public void onClick(View v) {
-//						Toast.makeText(context, "Selected: " + travelWalks.get(position).title, Toast.LENGTH_SHORT).show();
-////						Intent intent = new Intent(parent.getContext(), WalkViewActivity.class);
-////						parent.getContext().startActivity(intent);
-//					}
-//				});
+
+				convertView.setOnClickListener(new OnClickListener() {
+					private int pos = position;
+
+					public void onClick(View v) {
+						Toast.makeText(context, "Selected: " + travelWalks.get(position).title, Toast.LENGTH_SHORT).show();
+					}
+				});
 
 				convertView.setTag(holder);
 			} 
@@ -149,6 +146,26 @@ public class WalksListViewActivity extends ListActivity {
 
 		public Object getItem(int position) {
 			return travelWalks.get(position);
+		}
+		
+		private Drawable ImageOperations(Context ctx, String url, String saveFilename) {
+			try {
+				InputStream is = (InputStream) this.fetch(url);
+				Drawable d = Drawable.createFromStream(is, "src");
+				return d;
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		public Object fetch(String address) throws MalformedURLException,IOException {
+			URL url = new URL(address);
+			Object content = url.getContent();
+			return content;
 		}
 	}
 
