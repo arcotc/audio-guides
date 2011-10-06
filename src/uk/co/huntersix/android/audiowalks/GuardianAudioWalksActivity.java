@@ -1,4 +1,4 @@
-package uk.co.huntersix.android;
+package uk.co.huntersix.android.audiowalks;
 
 import android.app.Activity;
 import android.content.Intent;

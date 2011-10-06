@@ -1,4 +1,4 @@
-package uk.co.huntersix.android.manager;
+package uk.co.huntersix.android.audiowalks.manager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;

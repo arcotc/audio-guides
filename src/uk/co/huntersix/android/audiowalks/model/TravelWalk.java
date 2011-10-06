@@ -1,4 +1,4 @@
-package uk.co.huntersix.android.model;
+package uk.co.huntersix.android.audiowalks.model;
 
 public class TravelWalk {
 	public String imageUrl;

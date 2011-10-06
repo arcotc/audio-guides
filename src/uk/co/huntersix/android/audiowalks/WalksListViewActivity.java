@@ -1,6 +1,5 @@
-package uk.co.huntersix.android;
+package uk.co.huntersix.android.audiowalks;
 
-import java.lang.annotation.Target;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import uk.co.huntersix.android.model.TravelWalk;
+import uk.co.huntersix.android.audiowalks.model.TravelWalk;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +21,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
@@ -31,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class WalksListViewActivity extends ListActivity {
 	private ProgressBar progressBar;
@@ -65,7 +62,12 @@ public class WalksListViewActivity extends ListActivity {
 
 		Intent intent = new Intent(this, WalkViewActivity.class);
 		TravelWalk travelWalk = travelWalks.get(position);
-		intent.putExtra("travelWalkTitle", travelWalk.title);
+		intent.putExtra("travelWalk.title", travelWalk.title);
+		intent.putExtra("travelWalk.description", travelWalk.description);
+		intent.putExtra("travelWalk.imageUrl", travelWalk.imageUrl);
+		intent.putExtra("travelWalk.latitude", travelWalk.latitude);
+		intent.putExtra("travelWalk.longitude", travelWalk.longitude);
+		intent.putExtra("travelWalk.mapUrl", travelWalk.mapUrl);
     	this.startActivity(intent);
 	}
 
