@@ -190,7 +190,14 @@ public class WalksListViewActivity extends ListActivity {
 		        		else {
 		        			useThisResult = false;
 		        		}
-		        		travelWalk.imageUrl = (fields.getString("thumbnail") == null) ? "" : fields.getString("thumbnail");
+		        		
+		        		try {
+		        			travelWalk.imageUrl = (fields.getString("thumbnail") == null) ? "" : fields.getString("thumbnail");
+		        		}
+		        		catch (Exception e) {
+		        			// Ignore
+		        		}
+
 		        		try {
 			        		travelWalk.longitude = (fields.getString("longitude") == null) ? "" : fields.getString("longitude");
 			        		travelWalk.latitude = (fields.getString("latitude") == null) ? "" : fields.getString("latitude");
