@@ -43,7 +43,7 @@ public class WalksListViewActivity extends ListActivity {
         progressBar = (ProgressBar)findViewById(R.id.progressbar_Horizontal);
         progressBar.setProgress(0);
         
-        new LoadAPIContentTask().execute("http://content.guardianapis.com/search?q=london-walks&section=travel&format=json&show-fields=standfirst%2Clongitude%2Clatitude%2Cthumbnail&api-key=pbpw3gnyu3kcna9eqe736aj6");
+        new LoadAPIContentTask().execute("http://content.guardianapis.com/search?q=london-walks&page-size=50&section=travel&format=json&show-fields=standfirst%2Clongitude%2Clatitude%2Cthumbnail&api-key=pbpw3gnyu3kcna9eqe736aj6");
 	}
 
 	public void showList(List<TravelWalk> results) {
@@ -104,14 +104,6 @@ public class WalksListViewActivity extends ListActivity {
 				holder.textLine = (TextView) convertView.findViewById(R.id.textLine);
 				holder.description = (TextView) convertView.findViewById(R.id.description);
 				holder.walkThumbnail = (ImageView) convertView.findViewById(R.id.iconLine);
-//
-//				convertView.setOnClickListener(new OnClickListener() {
-//					public void onClick(View v) {
-//						Toast.makeText(context, "Selected: " + travelWalks.get(position).title, Toast.LENGTH_SHORT).show();
-////						Intent intent = new Intent(parent.getContext(), WalkViewActivity.class);
-////						parent.getContext().startActivity(intent);
-//					}
-//				});
 
 				convertView.setTag(holder);
 			} 

@@ -5,4 +5,6 @@
     <string name="travel_walks_london">London Travel Walks</string>
     <string name="travel_walks_london_title">Guardian Audio Walks - London Travel Walks</string>
 	<string name="package_str">uk.co.huntersix.android.audiowalks</string>
+	<!--string name="mapsApiKey">0IubRNy2riKDHqYpNkg9JvmeJDgRW5rZWI_qR4w</string-->
+	<string name="mapsApiKey">0kod4sCYiubdJgosdcOmDAWpiMG54PeF4u3HmKA</string>
 </resources>

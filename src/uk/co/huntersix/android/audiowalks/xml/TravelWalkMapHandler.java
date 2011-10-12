@@ -5,6 +5,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import uk.co.huntersix.android.audiowalks.model.Placemark;
+import uk.co.huntersix.android.audiowalks.model.PlacemarkPoint;
 import uk.co.huntersix.android.audiowalks.model.TravelWalkMap;
 
 public class TravelWalkMapHandler extends DefaultHandler {
@@ -12,10 +13,13 @@ public class TravelWalkMapHandler extends DefaultHandler {
 	private boolean nameTag = false;
 	private boolean descriptionTag = false;
 	private boolean placemarkTag = false;
-	private boolean in_mytag = false;
+	private boolean pointTag = false;
+	private boolean coordTag = false;
+	private String tempStringValue;
 
 	private TravelWalkMap travelWalkMap;
 	private Placemark placemark;
+	private PlacemarkPoint placemarkPoint;
 
 	public TravelWalkMap getParsedData() {
 		return this.travelWalkMap;
@@ -50,7 +54,7 @@ public class TravelWalkMapHandler extends DefaultHandler {
 				travelWalkMap.name = atts.getValue("name");
 			} 
 			else if (localName.equalsIgnoreCase("description")) {
-				in_mytag = true;
+				descriptionTag = true;
 				
 				travelWalkMap.description = atts.getValue("description");
 			}
@@ -72,6 +76,14 @@ public class TravelWalkMapHandler extends DefaultHandler {
 				
 				placemark.description = atts.getValue("description");
 			}
+			else if (localName.equalsIgnoreCase("point")) {
+				pointTag = true;
+				
+				placemarkPoint = new PlacemarkPoint();
+			}
+			else if (pointTag && localName.equalsIgnoreCase("coordinates")) {
+				coordTag = true;
+			}
 		}
 	}
 
@@ -81,26 +93,56 @@ public class TravelWalkMapHandler extends DefaultHandler {
 	@Override
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
 		if (localName.equalsIgnoreCase("document")) {
-			this.documentTag = false;
-		} else if (localName.equalsIgnoreCase("name")) {
-			this.nameTag = false;
-		} else if (localName.equalsIgnoreCase("description")) {
-			this.descriptionTag = false;
-		} else if (localName.equalsIgnoreCase("placemark")) {
-			this.placemarkTag = false;
+			documentTag = false;
+		} 
+		else if (localName.equalsIgnoreCase("name")) {
+			if (placemarkTag) {
+				placemark.name = tempStringValue;
+			}
+			else {
+				travelWalkMap.name = tempStringValue;
+			}
+
+			nameTag = false;
+		} 
+		else if (localName.equalsIgnoreCase("description")) {
+			if (placemarkTag) {
+				placemark.description = tempStringValue;
+			}
+			else {
+				travelWalkMap.description = tempStringValue;
+			}
+
+			descriptionTag = false;
+		} 
+		else if (localName.equalsIgnoreCase("placemark")) {
+			placemarkTag = false;
 			
 			travelWalkMap.placemarks.add(placemark);
 			placemark = null;
+		}
+		else if (localName.equalsIgnoreCase("point")) {
+			placemark.point = placemarkPoint;
+
+			pointTag = false;
+		}
+		else if (localName.equalsIgnoreCase("coordinates")) {
+			coordTag = false;
 		}
 	}
 
 	/**
 	 * Gets be called on the following structure: <tag>characters</tag>
 	 */
-//	@Override
-//	public void characters(char ch[], int start, int length) {
-//		if (this.in_mytag) {
-//			travelWalkMap.setExtractedString(new String(ch, start, length));
-//		}
-//	}
+	@Override
+	public void characters(char ch[], int start, int length) {
+		if (nameTag || descriptionTag) {
+			tempStringValue = new String(ch, start, length);
+		}
+		else if (coordTag) {
+			String[] temp = new String(ch, start, length).split(",");
+			placemarkPoint.coord1 = new Double(temp[1]) * 1E6;
+			placemarkPoint.coord2 = new Double(temp[0]) * 1E6;
+		}
+	}
 }
