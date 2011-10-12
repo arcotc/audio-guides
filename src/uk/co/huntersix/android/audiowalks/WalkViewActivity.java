@@ -46,17 +46,6 @@ public class WalkViewActivity extends MapActivity {
         progressBar = (ProgressBar)findViewById(R.id.progressbar_Horizontal);
         progressBar.setProgress(0);
 
-//		MapView mapView = (MapView) findViewById(R.id.mapview);
-//	    mapView.setBuiltInZoomControls(true);
-	    
-//	    List<Overlay> mapOverlays = mapView.getOverlays();
-//	    Drawable drawable = this.getResources().getDrawable(R.drawable.icon);
-//	    GroundZeroItemizedOverlay itemizedoverlay = new GroundZeroItemizedOverlay(drawable);
-//	    
-//	    GeoPoint point = calculateGeoPoint(bundle.getString("travelWalk.latitude"), bundle.getString("travelWalk.longitude"));
-//	    OverlayItem overlayitem = new OverlayItem(point, "Hola, Mundo!", "I'm in Mexico City!");
-	    
-//	    TravelWalkMap travelWalkMap = processGeoPointsFromMap(bundle.getString("travelWalk.mapUrl"));
         new LoadMapContentTask().execute(bundle.getString("travelWalk.mapUrl"));
 	}
 	
