@@ -12,6 +12,8 @@ import org.xml.sax.XMLReader;
 import uk.co.huntersix.android.audiowalks.model.Placemark;
 import uk.co.huntersix.android.audiowalks.model.TravelWalkMap;
 import uk.co.huntersix.android.audiowalks.xml.TravelWalkMapHandler;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -19,6 +21,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -31,10 +34,14 @@ public class WalkViewActivity extends MapActivity {
 	private final String MY_DEBUG_TAG = "WeatherForcaster";
 	private ProgressBar progressBar;
     private GeoPoint basePoint = null;
+    private Context context;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		context = getApplicationContext();
+		
 		setContentView(R.layout.walk);
 		
 		Intent intent = getIntent();
@@ -60,6 +67,12 @@ public class WalkViewActivity extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
+	
+	public static void showClickPoint(Context context, OverlayItem item) {
+		Toast.makeText(context, "Msg: " + item.getTitle(), Toast.LENGTH_SHORT);
+		
+//		item.getSnippet()
+	}
 
 	public void showResults(TravelWalkMap travelWalkMap) {
 		MapView mapView = (MapView) findViewById(R.id.mapview);
@@ -67,7 +80,7 @@ public class WalkViewActivity extends MapActivity {
 
 	    List<Overlay> mapOverlays = mapView.getOverlays();
 	    Drawable drawable = this.getResources().getDrawable(R.drawable.icon);
-	    GroundZeroItemizedOverlay itemizedoverlay = new GroundZeroItemizedOverlay(drawable);
+	    GroundZeroItemizedOverlay itemizedoverlay = new GroundZeroItemizedOverlay(context, drawable);
 	    
 	    GeoPoint point = null;
 	    if ((travelWalkMap != null) && (travelWalkMap.placemarks.size() > 0)) {

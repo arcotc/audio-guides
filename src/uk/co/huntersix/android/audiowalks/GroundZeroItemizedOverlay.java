@@ -17,7 +17,7 @@ public class GroundZeroItemizedOverlay extends ItemizedOverlay {
 		super(boundCenterBottom(defaultMarker));
 	}
 	
-	public GroundZeroItemizedOverlay(Drawable defaultMarker, Context context) {
+	public GroundZeroItemizedOverlay(Context context, Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
 		this.context = context;
 	}
@@ -30,10 +30,8 @@ public class GroundZeroItemizedOverlay extends ItemizedOverlay {
 	@Override
 	protected boolean onTap(int index) {
 	  OverlayItem item = overlays.get(index);
-	  AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-	  dialog.setTitle(item.getTitle());
-	  dialog.setMessage(item.getSnippet());
-	  dialog.show();
+	  
+	  WalkViewActivity.showClickPoint(context, item);
 	  
 	  return true;
 	}
