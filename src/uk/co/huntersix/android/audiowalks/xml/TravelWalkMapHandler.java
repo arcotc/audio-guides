@@ -140,9 +140,15 @@ public class TravelWalkMapHandler extends DefaultHandler {
 			tempStringValue = new String(ch, start, length);
 		}
 		else if (coordTag) {
-			String[] temp = new String(ch, start, length).split(",");
-			placemarkPoint.coord1 = new Double(temp[1]) * 1E6;
-			placemarkPoint.coord2 = new Double(temp[0]) * 1E6;
+			try {
+				String[] temp = new String(ch, start, length).split(",");
+				placemarkPoint.coord1 = new Double(temp[1]) * 1E6;
+				placemarkPoint.coord2 = new Double(temp[0]) * 1E6;
+			}
+			catch (Exception e) {
+				// Sometimes an outofboundsexception occurs here but I can't reproduce it in debug mode
+				// ignore - for now
+			}
 		}
 	}
 }
